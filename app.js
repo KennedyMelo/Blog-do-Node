@@ -13,6 +13,8 @@
   require("./models/Categoria")
   const Categoria = mongoose.model("categorias")
   const usuarios = require("./routes/usuario")
+  const passport = require("passport")
+  require("./config/auth")(passport)
 //Configurações 
   // Sessão
     app.use(session({
@@ -20,12 +22,18 @@
       resave: true,
       saveUninitialized: true
     }))
+
+    app.use(passport.initialize())
+    app.use(passport.session())
+    
     app.use(flash())
   //Middleware
     app.use((req, res, next) => {
       //global variables
       res.locals.success_msg = req.flash("success_msg")
       res.locals.error_msg = req.flash("error_msg")
+      res.locals.error = req.flash("error")
+      res.locals.user = req.user || null
       next()
     })
   //Body Parser
@@ -43,10 +51,6 @@
     })
   //Public
     app.use(express.static(path.join(__dirname, "public")))
-    app.use((req, res, next) =>{
-      console.log("OI EU SOU UM MIDDLEWARE!")
-      next()
-    })
 //Rotas
   app.get('/', (req, res) => {
     Postagem.find().populate("categoria").sort({data: "desc"}).then((postagens) => {
