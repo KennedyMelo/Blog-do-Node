@@ -1,3 +1,5 @@
+#password
+config/db.js
 # Logs
 logs
 *.log
