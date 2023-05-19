@@ -12,11 +12,11 @@ const Usuario = new Schema({
   },
   eAdmin: {
     type: Boolean,
-    default: false
+    default: true
   },
   senha: {
     type: String,
-    required: true
+    required: false
   }
 })
 
